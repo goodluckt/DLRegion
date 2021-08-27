@@ -1,0 +1,933 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="8e97609f-095e-46f3-98ca-66ba5d0e53d5" name="Default Changelist" comment="" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CoverageDataManager">
+    <SUITE FILE_PATH="coverage/DLRegion$prac.coverage" NAME="prac Coverage Results" MODIFIED="1624351734282" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/MNIST" />
+    <SUITE FILE_PATH="coverage/DLRegion_1$prac1.coverage" NAME="prac1 Coverage Results" MODIFIED="1626767917228" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/CIFAR_10" />
+    <SUITE FILE_PATH="coverage/DLRegion$drawplot.coverage" NAME="drawplot Coverage Results" MODIFIED="1625109180239" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/MNIST" />
+    <SUITE FILE_PATH="coverage/DLRegion_1$gen_diff.coverage" NAME="gen_diff Coverage Results" MODIFIED="1627349893710" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/CIFAR_10" />
+    <SUITE FILE_PATH="coverage/DLRegion_1$seed_selection_valid__1_.coverage" NAME="seed_selection_valid (1) Coverage Results" MODIFIED="1626400116264" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/MNIST" />
+    <SUITE FILE_PATH="coverage/DLRegion_1$drawplot.coverage" NAME="drawplot Coverage Results" MODIFIED="1627125509065" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/CIFAR_10" />
+    <SUITE FILE_PATH="coverage/DLRegion___$seed_selection_valid.coverage" NAME="seed_selection_valid Coverage Results" MODIFIED="1626182050738" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/MNIST" />
+    <SUITE FILE_PATH="coverage/DLRegion_1$get_seeds.coverage" NAME="get_seeds Coverage Results" MODIFIED="1626400889488" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/CIFAR-10" />
+    <SUITE FILE_PATH="coverage/DLRegion_1$get_seeds__1_.coverage" NAME="get_seeds (1) Coverage Results" MODIFIED="1626774132436" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/CIFAR_10" />
+    <SUITE FILE_PATH="coverage/DLRegion_1$seed_selection_valid.coverage" NAME="seed_selection_valid Coverage Results" MODIFIED="1626244701266" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/MNIST" />
+    <SUITE FILE_PATH="coverage/DLRegion_1$prac__1_.coverage" NAME="prac (1) Coverage Results" MODIFIED="1626410722873" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/MNIST" />
+    <SUITE FILE_PATH="coverage/DLRegion$seed_selection_valid.coverage" NAME="seed_selection_valid Coverage Results" MODIFIED="1625998047396" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/MNIST" />
+    <SUITE FILE_PATH="coverage/DLRegion_1$prac.coverage" NAME="prac Coverage Results" MODIFIED="1626767814121" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/CIFAR_10" />
+  </component>
+  <component name="DatabaseView">
+    <option name="SHOW_INTERMEDIATE" value="true" />
+    <option name="GROUP_DATA_SOURCES" value="true" />
+    <option name="GROUP_SCHEMA" value="true" />
+    <option name="GROUP_CONTENTS" value="false" />
+    <option name="SORT_POSITIONED" value="false" />
+    <option name="SHOW_EMPTY_GROUPS" value="false" />
+    <option name="AUTO_SCROLL_FROM_SOURCE" value="false" />
+    <option name="HIDDEN_KINDS">
+      <set />
+    </option>
+    <expand />
+    <select />
+  </component>
+  <component name="FUSProjectUsageTrigger">
+    <session id="-1339772197">
+      <usages-collector id="statistics.lifecycle.project">
+        <counts>
+          <entry key="project.closed" value="1" />
+          <entry key="project.open.time.0" value="1" />
+          <entry key="project.open.time.2" value="1" />
+          <entry key="project.opened" value="2" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.extensions.open">
+        <counts>
+          <entry key="png" value="2" />
+          <entry key="py" value="6" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.types.open">
+        <counts>
+          <entry key="Image" value="2" />
+          <entry key="Python" value="6" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.extensions.edit">
+        <counts>
+          <entry key="py" value="4301" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.types.edit">
+        <counts>
+          <entry key="Python" value="4301" />
+        </counts>
+      </usages-collector>
+    </session>
+    <session id="-1481265681">
+      <usages-collector id="statistics.lifecycle.project">
+        <counts>
+          <entry key="project.closed" value="1" />
+          <entry key="project.open.time.1" value="1" />
+          <entry key="project.opened" value="1" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.extensions.edit">
+        <counts>
+          <entry key="py" value="68" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.types.edit">
+        <counts>
+          <entry key="Python" value="68" />
+        </counts>
+      </usages-collector>
+    </session>
+    <session id="-471267317">
+      <usages-collector id="statistics.lifecycle.project">
+        <counts>
+          <entry key="project.closed" value="9" />
+          <entry key="project.open.time.0" value="5" />
+          <entry key="project.open.time.1" value="5" />
+          <entry key="project.opened" value="10" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.extensions.open">
+        <counts>
+          <entry key="py" value="43" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.types.open">
+        <counts>
+          <entry key="Python" value="43" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.extensions.edit">
+        <counts>
+          <entry key="py" value="5759" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.types.edit">
+        <counts>
+          <entry key="Python" value="5759" />
+        </counts>
+      </usages-collector>
+    </session>
+  </component>
+  <component name="FileEditorManager">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/MNIST/drawplot.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="125">
+              <caret line="51" selection-start-line="51" selection-end-line="56" selection-end-column="43" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/MNIST/seed_selection_valid.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-165">
+              <caret line="17" column="4" selection-start-line="17" selection-start-column="4" selection-end-line="17" selection-end-column="4" />
+              <folding>
+                <element signature="e#0#28#0" expanded="true" />
+                <marker date="1626400118000" expanded="true" signature="571:576" ph="..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/MNIST/gen_diff.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1348">
+              <caret line="320" column="76" selection-start-line="320" selection-start-column="55" selection-end-line="320" selection-end-column="76" />
+              <folding>
+                <element signature="e#0#37#0" expanded="true" />
+                <marker date="1626244702000" expanded="true" signature="9391:17410" ph="..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/CIFAR_10/get_seeds.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-500">
+              <caret line="55" column="20" selection-start-line="55" selection-start-column="20" selection-end-line="55" selection-end-column="20" />
+              <folding>
+                <element signature="e#0#18#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/CIFAR_10/gen_diff.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="349">
+              <caret line="232" column="134" selection-start-line="232" selection-start-column="128" selection-end-line="232" selection-end-column="134" />
+              <folding>
+                <element signature="e#25#62#0" expanded="true" />
+                <marker date="1627349894000" expanded="true" signature="460:910" ph="..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/CIFAR_10/drawplot.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="242">
+              <caret line="65" column="34" lean-forward="true" selection-start-line="65" selection-start-column="34" selection-end-line="65" selection-end-column="34" />
+              <folding>
+                <element signature="e#0#31#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/CIFAR_10/utils.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="124">
+              <caret line="780" column="41" lean-forward="true" selection-start-line="780" selection-start-column="41" selection-end-line="780" selection-end-column="41" />
+              <folding>
+                <element signature="e#0#13#0" expanded="true" />
+                <element signature="e#8046#8856#0" />
+                <element signature="e#9229#10600#0" />
+                <element signature="e#10696#12869#0" />
+                <element signature="e#12963#14010#0" />
+                <element signature="e#13814#14761#0" />
+                <element signature="e#15139#15715#0" />
+                <element signature="e#15512#16295#0" />
+                <element signature="e#16613#17181#0" />
+                <element signature="e#17246#19088#0" />
+                <element signature="e#19149#19393#0" />
+                <element signature="e#19489#19891#0" />
+                <element signature="e#19964#20186#0" />
+                <element signature="e#19991#20484#0" />
+                <element signature="e#20569#21063#0" />
+                <element signature="e#20308#25129#0" />
+                <element signature="e#26130#31770#0" />
+                <element signature="e#31899#37629#0" />
+                <element signature="e#37760#40323#0" />
+                <element signature="e#40534#43214#0" />
+                <element signature="e#25165#25575#0" />
+                <element signature="e#25639#26470#0" />
+                <element signature="e#26541#26779#0" />
+                <marker date="1627308850000" expanded="true" signature="40529:42895" ph="..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$USER_HOME$/AppData/Local/Temp/360zip$Temp/360$4/image_fuzzer.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-825">
+              <folding>
+                <element signature="e#0#38#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$USER_HOME$/AppData/Local/Temp/360zip$Temp/360$5/image_fuzzer.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="499">
+              <caret line="190" column="50" selection-start-line="190" selection-start-column="31" selection-end-line="190" selection-end-column="50" />
+              <folding>
+                <element signature="e#0#38#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/MNIST/utils.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="282">
+              <caret line="641" selection-start-line="641" selection-end-line="687" selection-end-column="42" />
+              <folding>
+                <element signature="e#0#13#0" expanded="true" />
+                <element signature="e#1373#1480#0" />
+                <element signature="e#1685#1899#0" />
+                <element signature="e#1953#2174#0" />
+                <element signature="e#2215#2320#0" />
+                <element signature="e#2383#4117#0" />
+                <element signature="e#4160#4288#0" />
+                <element signature="e#4346#4559#0" />
+                <element signature="e#4618#6060#0" />
+                <element signature="e#6976#8281#0" />
+                <element signature="e#8377#10485#0" />
+                <element signature="e#10579#11561#0" />
+                <element signature="e#11644#12524#0" />
+                <element signature="e#12626#13202#0" />
+                <element signature="e#13276#13992#0" />
+                <element signature="e#14035#14603#0" />
+                <element signature="e#14668#16445#0" />
+                <element signature="e#16507#16751#0" />
+                <element signature="e#16846#17248#0" />
+                <element signature="e#17321#17543#0" />
+                <element signature="e#17623#18116#0" />
+                <element signature="e#18201#18695#0" />
+                <element signature="e#18816#23610#0" />
+                <element signature="e#23735#29375#0" />
+                <element signature="e#29504#35234#0" />
+                <element signature="e#35365#37928#0" />
+                <element signature="e#38016#39085#0" />
+                <element signature="e#39194#40733#0" />
+                <element signature="e#40805#41362#0" />
+                <element signature="e#41399#41809#0" />
+                <element signature="e#41873#42704#0" />
+                <element signature="e#42776#43014#0" />
+                <element signature="e#43082#43839#0" />
+                <element signature="e#43988#45618#0" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/MNIST/drawplot.py" />
+        <option value="$PROJECT_DIR$/MNIST/gen_diff.py" />
+        <option value="$PROJECT_DIR$/CIFAR-10/prac.py" />
+        <option value="$PROJECT_DIR$/CIFAR-10/utils.py" />
+        <option value="$PROJECT_DIR$/CIFAR-10/_init_.py" />
+        <option value="$PROJECT_DIR$/CIFAR-10/get_seeds.py" />
+        <option value="$PROJECT_DIR$/MNIST/seed_selection_valid.py" />
+        <option value="$PROJECT_DIR$/MNIST/prac.py" />
+        <option value="$PROJECT_DIR$/CIFAR_10/prac.py" />
+        <option value="$PROJECT_DIR$/CIFAR_10/prac1.py" />
+        <option value="$PROJECT_DIR$/CIFAR_10/get_seeds.py" />
+        <option value="$PROJECT_DIR$/CIFAR_10/drawplot.py" />
+        <option value="$PROJECT_DIR$/MNIST/utils.py" />
+        <option value="$PROJECT_DIR$/CIFAR_10/utils.py" />
+        <option value="$PROJECT_DIR$/CIFAR_10/gen_diff.py" />
+      </list>
+    </option>
+  </component>
+  <component name="JsBuildToolGruntFileManager" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsBuildToolPackageJson" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsGulpfileManager">
+    <detection-done>true</detection-done>
+    <sorting>DEFINITION_ORDER</sorting>
+  </component>
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="-253" />
+    <option name="y" value="30" />
+    <option name="width" value="968" />
+    <option name="height" value="680" />
+  </component>
+  <component name="ProjectId" id="1uHcvLcb3xmXqkkRoB3jrZKqJRo" />
+  <component name="ProjectView">
+    <navigator proportions="" version="1">
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="Scope" />
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="DLRegion-1" type="b2602c69:ProjectViewProjectNode" />
+              <item name="DLRegion-1" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="DLRegion-1" type="b2602c69:ProjectViewProjectNode" />
+              <item name="DLRegion-1" type="462c0819:PsiDirectoryNode" />
+              <item name="CIFAR_10" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="DLRegion-1" type="b2602c69:ProjectViewProjectNode" />
+              <item name="DLRegion-1" type="462c0819:PsiDirectoryNode" />
+              <item name="MNIST" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="DLRegion-1" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+    </panes>
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../plot/CIFAR_10" />
+    <property name="settings.editor.selected.configurable" value="PyConsoleConfigurable.Python Console" />
+  </component>
+  <component name="PyConsoleOptionsProvider">
+    <option name="myPythonConsoleState">
+      <console-settings module-name="DLRegion" is-module-sdk="true">
+        <option name="myUseModuleSdk" value="true" />
+        <option name="myModuleName" value="DLRegion" />
+      </console-settings>
+    </option>
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="E:\A\DLRegion-1\CIFAR-10" />
+      <recent name="E:\code\DLRegion\MNIST" />
+    </key>
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager" selected="Python.gen_diff">
+    <configuration name="drawplot" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="DLRegion" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/CIFAR_10" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/CIFAR_10/drawplot.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="gen_diff" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="DLRegion" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/CIFAR_10" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/CIFAR_10/gen_diff.py" />
+      <option name="PARAMETERS" value="[1] 0.65 5 0716 5 resnet20 NC" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="get_seeds (1)" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="DLRegion" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/CIFAR_10" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/CIFAR_10/get_seeds.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="prac" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="DLRegion" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/CIFAR_10" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/CIFAR_10/prac.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="prac1" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="DLRegion" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/CIFAR_10" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/CIFAR_10/prac1.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="Python.get_seeds (1)" />
+      <item itemvalue="Python.prac" />
+      <item itemvalue="Python.gen_diff" />
+      <item itemvalue="Python.drawplot" />
+      <item itemvalue="Python.prac1" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.gen_diff" />
+        <item itemvalue="Python.drawplot" />
+        <item itemvalue="Python.get_seeds (1)" />
+        <item itemvalue="Python.prac1" />
+        <item itemvalue="Python.prac" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="ServiceViewManager">
+    <option name="viewStates">
+      <list>
+        <serviceView>
+          <treeState>
+            <expand />
+            <select />
+          </treeState>
+        </serviceView>
+      </list>
+    </option>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="8e97609f-095e-46f3-98ca-66ba5d0e53d5" name="Default Changelist" comment="" />
+      <created>1624326184803</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1624326184803</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="TodoView">
+    <todo-panel id="selected-file">
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+    <todo-panel id="all">
+      <are-packages-shown value="true" />
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
+    <layout>
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.17560321" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.49798927" visible="true" weight="0.3286119" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" weight="0.3286119" />
+      <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Version Control" order="8" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Database Changes" order="9" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.5020107" side_tool="true" weight="0.3286119" />
+      <window_info anchor="bottom" id="Terminal" order="11" />
+      <window_info anchor="bottom" id="Python Console" order="12" weight="0.3286119" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="right" id="SciView" order="3" weight="0.288874" />
+      <window_info anchor="right" id="Database" order="4" weight="0.3297587" />
+    </layout>
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state width="1344" height="174" key="GridCell.Tab.0.bottom" timestamp="1624336177173">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state width="1344" height="174" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1624336177173" />
+    <state width="1344" height="174" key="GridCell.Tab.0.center" timestamp="1624336177173">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state width="1344" height="174" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1624336177173" />
+    <state width="1344" height="174" key="GridCell.Tab.0.left" timestamp="1624336177173">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state width="1344" height="174" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1624336177173" />
+    <state width="1344" height="174" key="GridCell.Tab.0.right" timestamp="1624336177173">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state width="1344" height="174" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1624336177173" />
+    <state x="186" y="0" key="SettingsEditor" timestamp="1624326386186">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="186" y="0" key="SettingsEditor/0.0.1366.728@0.0.1366.728" timestamp="1624326386186" />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/MNIST/generated_inputs/lenet5_NC_[5]_4/4363_7_3_42.png" />
+    <entry file="file://$PROJECT_DIR$/MNIST/generated_inputs/lenet5_NC_[5]_4/729_4_8_53.png" />
+    <entry file="file://D:/python/anaconda/envs/python36/Lib/site-packages/tensorflow_core/python/framework/ops.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="149">
+          <caret line="1618" selection-start-line="1618" selection-end-line="1618" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://D:/python/anaconda/envs/python36/Lib/site-packages/keras/backend/tensorflow_backend.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="41750">
+          <caret line="1694" selection-start-line="1694" selection-end-line="1694" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Temp/360zip$Temp/360$2/image_fuzzer.py" />
+    <entry file="file://$USER_HOME$/AppData/Local/Temp/360zip$Temp/360$3/image_queue.py" />
+    <entry file="file://$PROJECT_DIR$/CIFAR-10/_init_.py" />
+    <entry file="file://$PROJECT_DIR$/CIFAR-10/prac.py" />
+    <entry file="file://$PROJECT_DIR$/CIFAR-10/utils.py" />
+    <entry file="file://$PROJECT_DIR$/CIFAR-10/get_seeds.py" />
+    <entry file="file://$PROJECT_DIR$/MNIST/prac.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="6" selection-start-line="6" selection-end-line="6" />
+          <folding>
+            <element signature="e#0#25#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://D:/python/anaconda/envs/python36/Lib/site-packages/imageio/core/request.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="6450">
+          <caret line="264" selection-start-line="264" selection-end-line="264" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://D:/python/anaconda/envs/python36/Lib/site-packages/tensorflow_core/python/util/dispatch.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4300">
+          <caret line="179" selection-start-line="179" selection-end-line="179" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Temp/360zip$Temp/360$0/image_queue.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-3819">
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Temp/360zip$Temp/360$1/image_fuzzer.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="275">
+          <caret line="50" column="31" selection-start-line="50" selection-start-column="24" selection-end-line="50" selection-end-column="31" />
+          <folding>
+            <element signature="e#0#38#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/CIFAR_10/prac.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="100">
+          <caret line="10" selection-start-line="10" selection-end-line="19" selection-end-column="17" />
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/CIFAR_10/prac1.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="300">
+          <caret line="12" column="17" selection-start-line="12" selection-start-column="17" selection-end-line="12" selection-end-column="17" />
+          <folding>
+            <element signature="e#0#28#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://D:/python/anaconda/envs/python36/Lib/site-packages/keras_preprocessing/image/utils.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="141">
+          <caret line="112" selection-start-line="112" selection-end-line="112" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Temp/360zip$Temp/360$2/image_queue.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-900">
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Temp/360zip$Temp/360$3/image_fuzzer.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1125">
+          <folding>
+            <element signature="e#0#38#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Temp/360zip$Temp/360$6/fuzzer.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1825">
+          <caret line="73" column="58" selection-start-line="73" selection-start-column="42" selection-end-line="73" selection-end-column="58" />
+          <folding>
+            <element signature="e#0#23#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Temp/360zip$Temp/360$7/queue.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret line="39" column="28" lean-forward="true" selection-start-line="39" selection-start-column="28" selection-end-line="39" selection-end-column="28" />
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Temp/360zip$Temp/360$8/image_queue.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-25">
+          <caret line="101" column="15" selection-start-line="101" selection-start-column="11" selection-end-line="101" selection-end-column="15" />
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Temp/360zip$Temp/360$5/image_fuzzer.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="499">
+          <caret line="190" column="50" selection-start-line="190" selection-start-column="31" selection-end-line="190" selection-end-column="50" />
+          <folding>
+            <element signature="e#0#38#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Temp/360zip$Temp/360$9/image_queue.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1175">
+          <caret line="7" column="23" lean-forward="true" selection-start-line="7" selection-start-column="23" selection-end-line="7" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Temp/360zip$Temp/360$4/image_fuzzer.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-825">
+          <folding>
+            <element signature="e#0#38#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/CIFAR_10/get_seeds.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-500">
+          <caret line="55" column="20" selection-start-line="55" selection-start-column="20" selection-end-line="55" selection-end-column="20" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/MNIST/gen_diff.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1348">
+          <caret line="320" column="76" selection-start-line="320" selection-start-column="55" selection-end-line="320" selection-end-column="76" />
+          <folding>
+            <element signature="e#0#37#0" expanded="true" />
+            <marker date="1626244702000" expanded="true" signature="9391:17410" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/MNIST/drawplot.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="125">
+          <caret line="51" selection-start-line="51" selection-end-line="56" selection-end-column="43" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/MNIST/seed_selection_valid.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-165">
+          <caret line="17" column="4" selection-start-line="17" selection-start-column="4" selection-end-line="17" selection-end-column="4" />
+          <folding>
+            <element signature="e#0#28#0" expanded="true" />
+            <marker date="1626400118000" expanded="true" signature="571:576" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/CIFAR_10/drawplot.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="242">
+          <caret line="65" column="34" lean-forward="true" selection-start-line="65" selection-start-column="34" selection-end-line="65" selection-end-column="34" />
+          <folding>
+            <element signature="e#0#31#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/MNIST/utils.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="282">
+          <caret line="641" selection-start-line="641" selection-end-line="687" selection-end-column="42" />
+          <folding>
+            <element signature="e#0#13#0" expanded="true" />
+            <element signature="e#1373#1480#0" />
+            <element signature="e#1685#1899#0" />
+            <element signature="e#1953#2174#0" />
+            <element signature="e#2215#2320#0" />
+            <element signature="e#2383#4117#0" />
+            <element signature="e#4160#4288#0" />
+            <element signature="e#4346#4559#0" />
+            <element signature="e#4618#6060#0" />
+            <element signature="e#6976#8281#0" />
+            <element signature="e#8377#10485#0" />
+            <element signature="e#10579#11561#0" />
+            <element signature="e#11644#12524#0" />
+            <element signature="e#12626#13202#0" />
+            <element signature="e#13276#13992#0" />
+            <element signature="e#14035#14603#0" />
+            <element signature="e#14668#16445#0" />
+            <element signature="e#16507#16751#0" />
+            <element signature="e#16846#17248#0" />
+            <element signature="e#17321#17543#0" />
+            <element signature="e#17623#18116#0" />
+            <element signature="e#18201#18695#0" />
+            <element signature="e#18816#23610#0" />
+            <element signature="e#23735#29375#0" />
+            <element signature="e#29504#35234#0" />
+            <element signature="e#35365#37928#0" />
+            <element signature="e#38016#39085#0" />
+            <element signature="e#39194#40733#0" />
+            <element signature="e#40805#41362#0" />
+            <element signature="e#41399#41809#0" />
+            <element signature="e#41873#42704#0" />
+            <element signature="e#42776#43014#0" />
+            <element signature="e#43082#43839#0" />
+            <element signature="e#43988#45618#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/CIFAR_10/utils.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="124">
+          <caret line="780" column="41" lean-forward="true" selection-start-line="780" selection-start-column="41" selection-end-line="780" selection-end-column="41" />
+          <folding>
+            <element signature="e#0#13#0" expanded="true" />
+            <element signature="e#8046#8856#0" />
+            <element signature="e#9229#10600#0" />
+            <element signature="e#10696#12869#0" />
+            <element signature="e#12963#14010#0" />
+            <element signature="e#13814#14761#0" />
+            <element signature="e#15139#15715#0" />
+            <element signature="e#15512#16295#0" />
+            <element signature="e#16613#17181#0" />
+            <element signature="e#17246#19088#0" />
+            <element signature="e#19149#19393#0" />
+            <element signature="e#19489#19891#0" />
+            <element signature="e#19964#20186#0" />
+            <element signature="e#19991#20484#0" />
+            <element signature="e#20569#21063#0" />
+            <element signature="e#20308#25129#0" />
+            <element signature="e#26130#31770#0" />
+            <element signature="e#31899#37629#0" />
+            <element signature="e#37760#40323#0" />
+            <element signature="e#40534#43214#0" />
+            <element signature="e#25165#25575#0" />
+            <element signature="e#25639#26470#0" />
+            <element signature="e#26541#26779#0" />
+            <marker date="1627308850000" expanded="true" signature="40529:42895" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/CIFAR_10/gen_diff.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="349">
+          <caret line="232" column="134" selection-start-line="232" selection-start-column="128" selection-end-line="232" selection-end-column="134" />
+          <folding>
+            <element signature="e#25#62#0" expanded="true" />
+            <marker date="1627349894000" expanded="true" signature="460:910" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+  </component>
+</project>
