@@ -12,9 +12,7 @@ from datetime import  datetime
 #from MNIST import Model1
 from MNIST.utils import *
 
-model_name_list = ['lenet1','lenet4','lenet5']
-criterion_list = ['NC','KMNC','NBC','SNAC','TKNC']
-criterion_para_list = [0.5,1000,0,0,3]
+
 
 class gen_diff_region_effect():
     def __init__(self,model_name,criterion,criterion_para,neuron_select_area,subdir,iteration_times,neuron_to_cover_num,seed_selection_strategy):
@@ -162,7 +160,7 @@ class gen_diff_region_effect():
                                 img_list.append(gen_img)
                                 print('img_list+1')
                         elif criterion == 'KMNC':
-                            if current_coverage - previous_coverage > 0 and perturb_adversial < 0.02:
+                            if current_coverage - previous_coverage > 0.01 / (i + 1) and perturb_adversial < 0.02:
                                 img_list.append(gen_img)
                         elif criterion == 'NBC':
                             if current_coverage - previous_coverage > 0 and perturb_adversial < 0.02:
@@ -252,6 +250,7 @@ class gen_adv_DLRegion():
         model_layer_times2 = init_coverage_times(model, criterion, criterion_para)
         model_layer_times1 = init_coverage_times(model, criterion, criterion_para)
         model_layer_times_NC1 = init_coverage_times_NC(model)
+        model_layer_value1 = init_coverage_value(model)
         save_dir = './generated_inputs/' + subdir + '/'
         creat_path(save_dir)
         total_time = 0
@@ -276,6 +275,7 @@ class gen_adv_DLRegion():
                 ori_label = np.argmax(ori_pred[0])
 
                 label_top5 = np.argsort(ori_pred[0])[-5:]
+                update_coverage_value(gen_img, model, model_layer_value1)
                 update_NC_coverage(gen_img, model, model_layer_times_NC1, 0.5)
                 update_coverage(gen_img, model, model_name, model_layer_times1, criterion, criterion_para)
 
@@ -287,7 +287,7 @@ class gen_adv_DLRegion():
 
                 layer_output = (predict_weight * (loss_2 + loss_3 + loss_4 + loss_5) - loss_1)
 
-                loss_neuron = criterion_to_neuron_selection_strategy(criterion,model,get_neuron_output_region(gen_img,model,model_name),neuron_selection_area,model_layer_times_NC1,neuron_to_cover_num)
+                loss_neuron = criterion_to_neuron_selection_strategy(criterion,model,model_name,get_neuron_output_region(gen_img,model,model_name),neuron_selection_area,model_layer_times_NC1,model_layer_value1,neuron_to_cover_num)
 
                 EXTREME_VALUE = False
                 if EXTREME_VALUE:
@@ -309,7 +309,7 @@ class gen_adv_DLRegion():
                 for iter in range(iteration_times):
                     loss_neuron_list = iterate([gen_img])
 
-                    perturb = loss_neuron_list[-1] * learning_step * (random.random() + 0.5)
+                    perturb = loss_neuron_list[-1] * learning_step
 
                     gen_img += perturb
 
@@ -338,7 +338,7 @@ class gen_adv_DLRegion():
                                 img_list.append(gen_img)
                                 print('img_list+1')
                         elif criterion == 'KMNC':
-                            if current_coverage - previous_coverage > 0 and perturb_adversial < 0.02:
+                            if current_coverage - previous_coverage > 0.01 / (i + 1)and perturb_adversial < 0.02:
                                 print('img_list+1')
                                 img_list.append(gen_img)
                         elif criterion == 'NBC':
@@ -375,38 +375,304 @@ class gen_adv_DLRegion():
         used_time = total_time
         self.result =[neuron_coverage, adversarial_num_all,used_time]
 
+class gen_adv_compared_technique():
+    def __init__(self,model_name,criterion,criterion_para,neuron_select_strategy,iteration_times,neuron_to_cover_num,subdir,seed_selection_strategy,threshold,technique):
+        self.mode_name = model_name
+        self.model_name = model_name
+        self.criterion = criterion
+        self.criterion_para = criterion_para
+        self.subdir = subdir
+        self.iteration_times = iteration_times
+        self.neuron_to_cover_num = neuron_to_cover_num
+        self.neuron_select_stratey = neuron_select_strategy
+        img_rows, img_cols = 28, 28
+        input_shape = (img_rows, img_cols, 1)
+        input_tensor = Input(shape=input_shape)
+        K.set_learning_phase(0)
+        if model_name == 'lenet1':
+            model1 = load_model('./data/models/lenet1.h5')
+            before_softmax = 'dense_1'
+        elif model_name == 'lenet4':
+            model1 = load_model('./data/models/lenet4.h5')
+            before_softmax = 'dense_2'
+        elif model_name == 'lenet5':
+            model1 = load_model('.data/models/lenet5.h5')
+            before_softmax = 'dense_3'
+        else:
+            print('please specify model name')
+            os.exit(0)
+        print(model1.name)
+        model_layer_value1 = init_coverage_value(model1)
+        choose_save_dir = './choose_seeds_20'
+        if seed_selection_strategy == 0:
+            choose_seed_random('./seeds_50', choose_save_dir, model1, 20)
+        elif seed_selection_strategy == 1:
+            choose_seed('./seeds_50', choose_save_dir, model1, 20)
+        img_dir = choose_save_dir
+        img_paths = os.listdir(img_dir)
+        img_num = len(img_paths)
+        neuron_to_cover_weight = 0.7
+        predict_weight = 0.3
+        learning_step = 0.02
+        model_layer_times2 = init_coverage_times(model1, criterion, criterion_para)
+        model_layer_times1 = init_coverage_times(model1, criterion, criterion_para)
+        model_layer_times_NC1 = init_coverage_times_NC(model1)
+        save_dir = './generated_inputs/' + subdir + '/'
+        if os.path.exists(save_dir):
+            for i in os.listdir(save_dir):
+                path_file = os.path.join(save_dir, i)  # 类似于这种形式 E:\code\DLFuzz-master\MNIST\seeds_50\10452_6.png E:\code\DLFuzz-master\MNIST\seeds_50\14189_8.png
+                if os.path.isfile(path_file):
+                    os.remove(path_file)
+
+        if not os.path.exists(save_dir):
+            os.makedirs(save_dir)
+
+        # start = time.clock()
+        total_time = 0
+        total_norm = 0
+        adversial_num = 0
+
+        total_perturb_adversial = 0
+
+        for i in range(img_num):
+
+            start_time = time.clock()
+
+            img_list = []
+
+            img_path = os.path.join(img_dir, img_paths[i])  # 示例 ./seeds_50\10452_6.png
+
+            img_name = img_paths[i].split('.')[0]  # 10452_6
+
+            mannual_label = int(img_name.split('_')[1])
+
+            print(img_path)
+
+            tmp_img = preprocess_image(img_path)
+
+            orig_img = tmp_img.copy()
+
+            img_list.append(tmp_img)  # model_layer_times2 是记录种子图片中最原始图片的神经元激活的个数
+
+            update_coverage(tmp_img, model1, model_name, model_layer_times2, criterion,
+                            criterion_para)  # 更新model_layer_times2  看输入的图片导致哪些神经元被覆盖
+
+            while len(img_list) > 0:
+
+                gen_img = img_list[0]  # 这是否可以优先级排序
+
+                img_list.remove(gen_img)
+
+                # first check if input already induces differences
+                pred1 = model1.predict(gen_img)
+                label1 = np.argmax(pred1[0])
+
+                label_top5 = np.argsort(pred1[0])[-5:]  # argsort 是将pred1中按数值升序排序 返回的是数值对应的索引！！！
+
+                update_coverage_value(gen_img, model1, model_layer_value1)
+
+                update_NC_coverage(gen_img, model1, model_layer_times_NC1, threshold)
+
+                update_coverage(gen_img, model1, model_name, model_layer_times1, criterion, criterion_para)
+                # model_layer_times1 是记录中间图片和要生成新的图片时的神经元个数
+
+                orig_label = label1
+                orig_pred = pred1
+
+                loss_1 = K.mean(model1.get_layer(before_softmax).output[..., orig_label])
+                loss_2 = K.mean(model1.get_layer(before_softmax).output[..., label_top5[-2]])  # 预测标签概率第二大的
+                loss_3 = K.mean(model1.get_layer(before_softmax).output[..., label_top5[-3]])
+                loss_4 = K.mean(model1.get_layer(before_softmax).output[..., label_top5[-4]])
+                loss_5 = K.mean(model1.get_layer(before_softmax).output[..., label_top5[-5]])
+
+                layer_output = (predict_weight * (loss_2 + loss_3 + loss_4 + loss_5) - loss_1)
+
+                # neuron coverage loss
+                if technique == 'DLFuzz':
+                    loss_neuron = neuron_selection_DLFuzz(model1, model_layer_times_NC1, model_layer_value1,neuron_select_strategy, neuron_to_cover_num, threshold)
+                if technique == 'DeepXplore':
+                    loss_neuron = neuron_selection_DeepXplore(model1, model_layer_times_NC1, neuron_to_cover_num)
+                if technique == 'Random':
+                    loss_neuron = neuron_selection_Random(model1,model_layer_times_NC1,neuron_to_cover_num)
+                #
+                # loss_neuron = neuron_scale(loss_neuron) # useless, and negative result
+
+                # extreme value means the activation value for a neuron can be as high as possible ...
+                EXTREME_VALUE = False
+                if EXTREME_VALUE:
+                    neuron_to_cover_weight = 2
+
+                layer_output += neuron_to_cover_weight * K.sum(loss_neuron)
+
+                # for adversarial image generation
+                final_loss = K.mean(layer_output)
+
+                input_tensor = model1.input
+
+                # we compute the gradient of the input picture wrt this loss
+                grads = normalize(K.gradients(final_loss, input_tensor)[0])
+
+                grads_tensor_list = [loss_1, loss_2, loss_3, loss_4, loss_5]
+                grads_tensor_list.extend(loss_neuron)  # loss_neuron 有多个值
+                grads_tensor_list.append(grads)
+                # this function returns the loss and grads given the input picture
+
+                iterate = K.function([input_tensor], grads_tensor_list)
+
+                # we run gradient ascent for 3 steps
+                for iters in range(iteration_times):
+
+                    loss_neuron_list = iterate([gen_img])  # 对gen_img迭代几次
+
+                    perturb = loss_neuron_list[-1] * learning_step
+
+                    gen_img += perturb
+
+                    # previous accumulated neuron coverage
+                    previous_coverage = neuron_covered_num(criterion, model_layer_times1)[2]  # 后面有update_coverage更新了覆盖率
+
+                    pred1 = model1.predict(gen_img)
+                    label1 = np.argmax(pred1[0])
+
+                    update_NC_coverage(gen_img, model1, model_layer_times_NC1, threshold)
+
+                    update_coverage(gen_img, model1, model_name, model_layer_times1, criterion, criterion_para)
+
+                    current_coverage = neuron_covered_num(criterion, model_layer_times1)[2]
+
+                    diff_img = gen_img - orig_img
+
+                    L2_norm = np.linalg.norm(
+                        diff_img)  # x_norm=np.linalg.norm(x, ord=None, axis=None, keepdims=False) ord表示范数类型 默认为2范数
+
+                    orig_L2_norm = np.linalg.norm(orig_img)
+
+                    perturb_adversial = L2_norm / orig_L2_norm
+
+                    if label1 == orig_label:
+                        if criterion == 'NC':
+                            if current_coverage - previous_coverage > 0.01 / (i + 1) and perturb_adversial < 0.02:
+                                img_list.append(gen_img)
+                        elif criterion == 'KMNC':
+                            if current_coverage - previous_coverage > 0.01 / (i + 1) and perturb_adversial < 0.02:
+                                img_list.append(gen_img)
+                            # print('coverage diff = ', current_coverage - previous_coverage, 'perturb_adversial = ', perturb_adversial)
+                        elif criterion == 'NBC':
+                            if current_coverage - previous_coverage > 0 and perturb_adversial < 0.02:
+                                img_list.append(gen_img)
+                            # print('coverage diff = ', current_coverage - previous_coverage, 'perturb_adversial = ', perturb_adversial)
+                        elif criterion == 'SNAC':
+                            if current_coverage - previous_coverage > 0 and perturb_adversial < 0.02:
+                                img_list.append(gen_img)
+                        elif criterion == 'TKNC':
+                            if current_coverage - previous_coverage > 0 and perturb_adversial < 0.02:
+                                img_list.append(gen_img)
+                    else:
+                        update_coverage(gen_img, model1, model_name, model_layer_times2, criterion, criterion_para)
+
+                        total_norm += L2_norm
+
+                        total_perturb_adversial += perturb_adversial
+
+                        # print('L2 norm : ' + str(L2_norm))
+                        # print('ratio perturb = ', perturb_adversial)
+
+                        gen_img_tmp = gen_img.copy()
+
+                        gen_img_deprocessed = deprocess_image(gen_img_tmp)
+
+                        save_img = save_dir + img_name + '_' + str(get_signature()) + '.png'
+
+                        imsave(save_img, gen_img_deprocessed)
+
+                        adversial_num += 1
+
+            end_time = time.clock()
+
+            print('Total neuron : %d ,  Neuron coverage : %.3f' % (
+            len(model_layer_times2), neuron_covered_num(criterion, model_layer_times2)[2]))
+            duration = end_time - start_time
+            print('used time : ' + str(duration))
+            total_time += duration
+        neuron_coverage = neuron_covered_num(criterion, model_layer_times2)[2]
+        adversial_num_all = adversial_num
+        used_time_all = total_time
+        return neuron_coverage, adversial_num_all, used_time_all
+
 
 if __name__ == '__main__':
     technique = sys.argv[1]
+    model_name_list = ['lenet1', 'lenet4', 'lenet5']
+    criterion_list = ['NC', 'KMNC', 'NBC', 'SNAC', 'TKNC']
+    criterion_para_list = [0.5, 1000, 0, 0, 3]
+    seed_selection_strategy_list = [0, 1]
     if technique == 'DLRegion':
-        run_times  = 3
-        model_name = model_name_list[2]
-        for criterion_idx in range(len(criterion_list)):
-            if criterion_idx == 0:
-                continue
-            elif criterion_idx == 1:
-                continue
-            criterion = criterion_list[criterion_idx]
-            criterion_para = criterion_para_list[criterion_idx]
-            neuron_coverage_list = []
-            adversarial_nums_list = []
-            neuron_coverage_all = 0
-            adversarial_nums_all = 0
-            used_time_all = 0
-            for i in range(run_times):
-                neuron_coverage ,adversarial_nums , used_time = gen_adv_DLRegion(model_name,criterion,criterion_para,technique+'_'+model_name+'_'+criterion+'_'+str(i),5,5,0).result
-                neuron_coverage_list.append(neuron_coverage)
-                adversarial_nums_list.append(adversarial_nums)
-                neuron_coverage_all += neuron_coverage
-                adversarial_nums_all += adversarial_nums
-                used_time_all += used_time
-            neuron_coverage_average = neuron_coverage_all / run_times
-            adversarial_nums_average = adversarial_nums_all / run_times
-            used_time_average = used_time_all / run_times
-            print(model_name+'_'+ criterion + '_'+ 'Seed_selection0_Neuron coverage list: ')
-            print(neuron_coverage_list)
-            print(model_name+'_'+ criterion + '_'+ 'Seed_selection0_Adversarial nums list:')
-            print(adversarial_nums_list)
-            print(model_name+'_'+ criterion + '_'+ 'Seed_selection0_Average neuron coverage by 3 times : ' + str(neuron_coverage_average))
-            print(model_name+'_'+ criterion + '_'+ 'Seed_selection0_Average adversarial nums by 3 times : ' + str(adversarial_nums_average))
-            print(model_name+'_'+ criterion + '_'+ 'Seed_selection0_Average used time by 3 times :' + str(used_time_average))
+        for model_name_idx in range(len(model_name_list)):
+            model_name = model_name_list[model_name_idx]
+            print('开始计算：' + model_name)
+            for criterion_idx in range(len(criterion_list)):
+                criterion = criterion_list[criterion_idx]
+                criterion_para = criterion_para_list[criterion_idx]
+                seed_selection_strategy = seed_selection_strategy_list[1]
+                print('开始计算：'+criterion)
+                neuron_coverage_list = []
+                adversarial_nums_list = []
+                neuron_coverage_all = 0
+                adversarial_nums_all = 0
+                used_time_all = 0
+                run_times = 10
+                for i in range(run_times):
+                    print('第几次：'+str(i))
+                    neuron_coverage ,adversarial_nums , used_time = gen_adv_DLRegion(model_name,criterion,criterion_para,technique+'_'+model_name+'_'+criterion+'_seed_selection_strategy = '+ str(seed_selection_strategy) + '_'+str(i),5,5,seed_selection_strategy).result
+                    neuron_coverage_list.append(neuron_coverage)
+                    adversarial_nums_list.append(adversarial_nums)
+                    neuron_coverage_all += neuron_coverage
+                    adversarial_nums_all += adversarial_nums
+                    used_time_all += used_time
+                neuron_coverage_average = neuron_coverage_all / run_times
+                adversarial_nums_average = adversarial_nums_all / run_times
+                used_time_average = used_time_all / run_times
+                print(technique+ '_'+ model_name+'_'+ criterion + '_'+ 'Seed_selection_strategy = '+ str(seed_selection_strategy)+'_Neuron coverage list: ')
+                print(neuron_coverage_list)
+                print(technique+ '_'+ model_name+'_'+ criterion + '_'+ 'Seed_selection_strategy = '+ str(seed_selection_strategy)+'_Adversarial nums list:')
+                print(adversarial_nums_list)
+                print(technique+ '_'+ model_name+'_'+ criterion + '_'+ 'Seed_selection_strategy = '+ str(seed_selection_strategy)+'_Average neuron coverage by '+ str(run_times) +'times : ' + str(neuron_coverage_average))
+                print(technique+ '_'+ model_name+'_'+ criterion + '_'+ 'Seed_selection_strategy = '+ str(seed_selection_strategy)+'_Average adversarial nums by ' + str(run_times) + 'times : ' + str(adversarial_nums_average))
+                print(technique+ '_'+ model_name+'_'+ criterion + '_'+ 'Seed_selection_strategy = '+ str(seed_selection_strategy)+'_Average used time by ' + str(run_times) + 'times :' + str(used_time_average))
+    elif technique == 'DLFuzz' or 'DeepXplore' or 'Random':
+        neuron_selection_strategy_list = ['[0]', '[1]', '[2]', '[3]']
+        for model_name_idx in range(len(model_name_list)):
+            model_name = model_name_list[model_name_idx]
+            print('开始计算：' + model_name)
+            for criterion_idx in range(len(criterion_list)):
+                criterion = criterion_list[criterion_idx]
+                criterion_para = criterion_para_list[criterion_idx]
+                seed_selection_strategy = seed_selection_strategy_list[1]
+                print('开始计算：' + criterion)
+                for neuron_selection_strategy_idx in range(len(neuron_selection_strategy_list)):
+                    neuron_selection_strategy = neuron_selection_strategy_list[neuron_selection_strategy_idx]
+                    neuron_coverage_list = []
+                    adversarial_nums_list = []
+                    neuron_coverage_all = 0
+                    adversarial_nums_all = 0
+                    used_time_all = 0
+                    run_times = 10
+                    threshold = 0.5
+                    for i in range(run_times):
+                        print('第几次：' + str(i))
+                        neuron_coverage, adversarial_nums, used_time = gen_adv_compared_technique(model_name, criterion,criterion_para,neuron_selection_strategy, 5, 5,technique + '_' + model_name + '_' + criterion + '_neuron_selection_strategy = ' + str(neuron_selection_strategy) + '_' + str(i),seed_selection_strategy,threshold,technique).result
+                        neuron_coverage_list.append(neuron_coverage)
+                        adversarial_nums_list.append(adversarial_nums)
+                        neuron_coverage_all += neuron_coverage
+                        adversarial_nums_all += adversarial_nums
+                        used_time_all += used_time
+                    neuron_coverage_average = neuron_coverage_all / run_times
+                    adversarial_nums_average = adversarial_nums_all / run_times
+                    used_time_average = used_time_all / run_times
+                    print(technique + '_' + model_name + '_' + criterion + '_' + 'neuron_selection_strategy = ' + str(neuron_selection_strategy) + '_Neuron coverage list: ')
+                    print(neuron_coverage_list)
+                    print(technique + '_' + model_name + '_' + criterion + '_' + 'neuron_selection_strategy = ' + str(neuron_selection_strategy) + '_Adversarial nums list:')
+                    print(adversarial_nums_list)
+                    print(technique + '_' + model_name + '_' + criterion + '_' + 'neuron_selection_strategy = ' + str(neuron_selection_strategy) + '_Average neuron coverage by ' + str(run_times) + 'times : ' + str(neuron_coverage_average))
+                    print(technique + '_' + model_name + '_' + criterion + '_' + 'neuron_selection_strategy = ' + str(neuron_selection_strategy) + '_Average adversarial nums by ' + str(run_times) + 'times : ' + str(adversarial_nums_average))
+                    print(technique + '_' + model_name + '_' + criterion + '_' + 'neuron_selection_strategy = ' + str(neuron_selection_strategy) + '_Average used time by ' + str(run_times) + 'times :' + str(used_time_average))

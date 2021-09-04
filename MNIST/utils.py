@@ -64,6 +64,11 @@ def init_value(model,model_layer_neuron_value):
         for index in range(layer.output_shape[-1]):
             model_layer_neuron_value[(layer.name,index)] = 0
 
+def init_coverage_value(model):
+    model_layer_value = defaultdict(float)
+    init_times(model, model_layer_value)
+    return model_layer_value
+
 def init_coverage_times_NC(model):
     model_layer_times = defaultdict(int)
     init_times(model,model_layer_times)
@@ -111,6 +116,20 @@ def init_coverage_times(model,criterion,criterion_para):
                 model_layer_times[(layer.name, index)] = 0
         return model_layer_times
 
+def update_coverage_value(input_data, model, model_layer_value):
+    layer_names = [layer.name for layer in model.layers if
+                   'flatten' not in layer.name and 'input' not in layer.name]
+
+    intermediate_layer_model = Model(inputs=model.input,
+                                     outputs=[model.get_layer(layer_name).output for layer_name in layer_names])
+    intermediate_layer_outputs = intermediate_layer_model.predict(input_data)
+
+    for layer_idx,intermediate_layer_output in enumerate(intermediate_layer_outputs):
+        #Scaled = scale(intermediate_layer_output[0])    #profile 文件好像没有
+        for neuron_idx in range(intermediate_layer_output.shape[-1]):
+            neuron_value = np.mean(intermediate_layer_output[0][...,neuron_idx])
+            model_layer_value[(layer_names[layer_idx], neuron_idx)] = neuron_value
+    return intermediate_layer_outputs
 
 def init_layer_neuron_value(model):
     model_layer_neuron_value = defaultdict(float)
@@ -151,6 +170,7 @@ def neuron_covered_num(criterion,model_layer_times):
         covered_num = len([v for v in model_layer_times.values() if v > 0])
         total_neurons = len(model_layer_times)
         return covered_num, total_neurons, covered_num / float(total_neurons)
+
 
 
 def update_NC_coverage(input_data,model,model_layer_times,threshold=0):
@@ -277,6 +297,7 @@ def spilt_neuron_output(model_name):
     profile_dict = get_neuron_profile(model_name)
     equal = 1000
     low_up_equal = up_high_equal =  300
+    #low_up_equal = up_high_equal = 330
     neuron_spilt_bound_dict = {}
     for key,value in profile_dict.items():
         lower_bound = value[-2]
@@ -312,6 +333,13 @@ def get_neuron_output_region(input_data,model,model_name):
                 neuron_region_dict[(layer_names[layer_idx], neuron_idx)] = 5
     return neuron_region_dict
 
+def neuron_to_cover(model_layer_dict): #从model_layer_dict 随机选取未被激活的神经元
+    not_covered = [(layer_name, index) for (layer_name, index), v in model_layer_dict.items() if not v]  #dict_items([(('a', 0), False), (('a', 1), False)])
+    if not_covered:
+        layer_name, index = random.choice(not_covered)
+    else:
+        layer_name, index = random.choice(model_layer_dict.keys())  #dict_keys([('a', 0), ('a', 1)])
+    return layer_name, index
 
 def neuron_to_cover(not_covered,model_layer_times_NC):
     if not_covered:
@@ -321,6 +349,14 @@ def neuron_to_cover(not_covered,model_layer_times_NC):
         layer_name,neuron_idx = random.choice(model_layer_times_NC.keys())
     return layer_name,neuron_idx
 
+def neuron_to_cover_DeepXplore(model_layer_dict):
+    not_covered = [(layer_name, index) for (layer_name, index), v in model_layer_dict.items() if not v] #找出model_layer_dict中item为false的  输出形式为[('block1_conv1', 0), ('block1_conv1', 1)] 每个层都有 除去flatten和input层
+    if not_covered:
+        layer_name, index = random.choice(not_covered) #从未覆盖中随机选择一个
+    else:
+        layer_name, index = random.choice(model_layer_dict.keys()) #keys和item区别：dict_items([(('a', 0), False), (('a', 1), False)]) dict_keys([('a', 0), ('a', 1)])
+    return layer_name, index
+
 def random_strategy(model,model_layer_times_NC,neuron_to_cover_num): #随机选择神经元 不按照神经元选择策略
     loss_neuron = []
     not_covered = [(layer_name,neuron_idx) for (layer_name,neuron_idx),v in model_layer_times_NC.items() if v==0 ]
@@ -329,6 +365,30 @@ def random_strategy(model,model_layer_times_NC,neuron_to_cover_num): #随机选�
         loss00_neuron = K.mean(model.get_layer(layer_name).output[...,neuron_idx])
         loss_neuron.append(loss00_neuron)
     return loss_neuron
+
+def neuron_select_high_weight(model, layer_names, top_k):
+    global model_layer_weights_top_k  #存放参数layer_names指定的层中权值top_k所对应的[layer_name,index]
+    model_layer_weights_dict = {}
+    for layer_name in layer_names:
+        weights = model.get_layer(layer_name).get_weights() #得到该层(包括很多神经元）的权值组合
+        if len(weights) <= 0:
+            continue
+        w = np.asarray(weights[0])  # 0 is weights, 1 is biases
+        w = w.reshape(w.shape)
+        for index in range(model.get_layer(layer_name).output_shape[-1]):  #遍历layer_name对应层的神经元
+            index_w = np.mean(w[..., index])  #该神经元的权值
+            if index_w <= 0:
+                continue
+            model_layer_weights_dict[(layer_name,index)]=index_w  #存储了每层有权值的神经元的权值的平均值
+    # notice!  #dict_items([(('a', 0), 9), (('a', 1), 6)])
+    model_layer_weights_list = sorted(model_layer_weights_dict.items(), key=lambda x: x[1], reverse=True)  #key=lambda x: x[1] 表示按照列表的第二个元素排序 reverse=True 表示降序排序
+
+    k = 0
+    for (layer_name, index),weight in model_layer_weights_list:
+        if k >= top_k:
+            break
+        model_layer_weights_top_k.append([layer_name,index])  #选取权值topk的神经元
+        k += 1
 
 def get_neuron_cover_time(layer_neuronidx_list,model_layer_times):
     model_layer_times_region = {}
@@ -450,7 +510,7 @@ def neuron_selection(model,neuron_region_dict,neuron_selection_strategy,model_la
 
     if len(loss_neuron) == 0:
         return  random_strategy(model,model_layer_times_NC,1) , region_neuron_num
-
+    print(len(loss_neuron))
     return loss_neuron , region_neuron_num
 
 def neuron_selection_addtime(model,neuron_region_dict,neuron_selection_area,model_layer_times_NC,neuron_to_cover_num):
@@ -639,6 +699,52 @@ def neuron_selection_addmosttime(model,neuron_region_dict,neuron_selection_area,
     print(len(loss_neuron))
     return loss_neuron, region_neuron_num
 
+def neuron_selection_highest_output(model,model_name,neuron_region_dict,neuron_selection_area,model_layer_value1,neuron_to_cover_num):
+    region_neuron_num = 0
+    #if neuron_selection_area == None:
+        #return random_strategy(model, model_layer_times_NC, neuron_to_cover_num)
+    num_strategy = len([x for x in neuron_selection_area if x in ['1', '2', '3', '4', '5']])
+    neuron_to_cover_num_eachstrtegy = int(neuron_to_cover_num / num_strategy)
+    loss_neuron = []
+    neuron_bound_dict = spilt_neuron_output(model_name)
+    upperbound_sub_output_list = []
+    model_layer_list = []
+    choose_neuron_region = []
+    neuron_region = [(layer_name, neuron_idx) for (layer_name, neuron_idx), region in neuron_region_dict.items() if
+                      region == int(neuron_selection_area[1])]
+    region_neuron_num = len(neuron_region)
+    print(len(neuron_region))
+    if region_neuron_num < neuron_to_cover_num_eachstrtegy:
+        choose_neuron_region = neuron_region
+        for (layer_name, neuron_idx) in model_layer_value1.keys():
+            model_layer_list.append((layer_name,neuron_idx))
+            output = model_layer_value1[(layer_name, neuron_idx)]
+            upper_bound = neuron_bound_dict[(layer_name, neuron_idx)][3]
+            sub = upper_bound - output
+            upperbound_sub_output_list.append(sub)
+        upperbound_sub_output_list_sort = np.argsort(upperbound_sub_output_list)
+        for i in range(neuron_to_cover_num_eachstrtegy - region_neuron_num):
+            (layer_name1, neuron_idx1) = model_layer_list[upperbound_sub_output_list_sort[i]]
+            choose_neuron_region.append((layer_name1,neuron_idx1))
+    else:
+        for (layer_name,neuron_idx) in neuron_region:
+            output = model_layer_value1[(layer_name,neuron_idx)]
+            #print('output'+ str(output))
+            upper_bound = neuron_bound_dict[(layer_name,neuron_idx)][3]
+            sub = upper_bound - output
+            upperbound_sub_output_list.append(sub)
+        upperbound_sub_output_list_sort = np.argsort(upperbound_sub_output_list)
+        #print(upperbound_sub_output_list_sort)
+        for i in range(neuron_to_cover_num_eachstrtegy):
+            (layer_name1,neuron_idx1) = neuron_region[upperbound_sub_output_list_sort[i]]
+            choose_neuron_region.append((layer_name1, neuron_idx1))
+    for j in range(len(choose_neuron_region)):
+        layer_name0, neuron_idx0 = choose_neuron_region[j]
+        loss0_neuron = K.mean(model.get_layer(layer_name0).output[..., neuron_idx0])
+        loss_neuron.append(loss0_neuron)
+    print(len(loss_neuron))
+    return loss_neuron, region_neuron_num
+
 def neuron_selection_astime_random(model,neuron_region_dict,neuron_selection_area,model_layer_times_NC,neuron_to_cover_num):
     region_neuron_num = 0
     if neuron_selection_area == None:
@@ -686,7 +792,6 @@ def neuron_selection_astime_random(model,neuron_region_dict,neuron_selection_are
         return  random_strategy(model,model_layer_times_NC,1) , region_neuron_num
     print(len(loss_neuron))
     return loss_neuron , region_neuron_num
-
 
 def get_layer_region_neuron_num(input_data,model,model_name,neuron_select_area):
     neuron_region_dict = get_neuron_output_region(input_data,model,model_name)
@@ -750,6 +855,149 @@ def neuron_selection_upper(model,model_name,neuron_to_cover_num):
     print(len(loss_neuron))
     return loss_neuron
 
+def neuron_selection_DLFuzz(model, model_layer_times, model_layer_value, neuron_select_strategy, neuron_to_cover_num, threshold):
+    if neuron_select_strategy == 'None':
+        return random_strategy(model, model_layer_times, neuron_to_cover_num)
+
+    num_strategy = len([x for x in neuron_select_strategy if x in ['0', '1', '2', '3']])  #num_strategy存放选择神经元选择策略的策略数
+    neuron_to_cover_num_each = neuron_to_cover_num / num_strategy  #平均每个策略应该去覆盖几个神经元
+
+    loss_neuron = []
+    # initialization for strategies
+    if ('0' in list(neuron_select_strategy)) or ('1' in list(neuron_select_strategy)):
+        i = 0
+        neurons_covered_times = []
+        neurons_key_pos = {}
+        for (layer_name, index), time in model_layer_times.items():  #将model_layer_times.items中(layer_name, index) 和times分开存放
+            neurons_covered_times.append(time)  #此时的neurons_covered_times为[0,1,2,3]这种形式
+            neurons_key_pos[i] = (layer_name, index)
+            i += 1
+        neurons_covered_times = np.asarray(neurons_covered_times) #此时的 neurons_covered_times为[0 1 2 3]这种形式  这里是按层展开将一个个神经元曾经被覆盖次数列成一个数组
+        times_total = sum(neurons_covered_times) #总共覆盖了多少个神经元次数
+
+    # select neurons covered often
+    if '0' in list(neuron_select_strategy):  #选择经常或很少被覆盖的神经元
+        if times_total == 0: #还未覆盖任何神经元 则就需要一开始随机选取一个神经元覆盖 否则首先计算神经元覆盖比例
+            return random_strategy(model, model_layer_times, 1)#The beginning of no neurons covered
+        neurons_covered_percentage = neurons_covered_times / float(times_total) #这是每个神经元对应的覆盖次数占总次数的百分比 是一个一位数组
+        # num_neuron0 = np.random.choice(range(len(neurons_covered_times)), p=neurons_covered_percentage)
+        num_neuron0 = np.random.choice(range(len(neurons_covered_times)), int(neuron_to_cover_num_each), replace=True, p=neurons_covered_percentage)  #采样的数量是neuron_to_cover_num_each  replace指定为True时，采样的元素会有重复；当replace指定为False时，采样不会重复。 p : 一个一维数组，制定了a中每个元素采样的概率，若为默认的None，则a中每个元素被采样的概率相同   所以覆盖次数高的被采样几率大
+        for num in num_neuron0:
+            layer_name0, index0 = neurons_key_pos[num]
+            loss0_neuron = K.mean(model.get_layer(layer_name0).output[..., index0])
+            loss_neuron.append(loss0_neuron)
+
+    # select neurons covered rarely
+    if '1' in list(neuron_select_strategy):
+        if times_total == 0:
+            return random_strategy(model, model_layer_times, 1)
+        neurons_covered_times_inverse = np.subtract(max(neurons_covered_times), neurons_covered_times)  #按层展开每个神经元与最多被覆盖次数的神经元被覆盖次数差
+        neurons_covered_percentage_inverse = neurons_covered_times_inverse / float(sum(neurons_covered_times_inverse))
+        # num_neuron1 = np.random.choice(range(len(neurons_covered_times)), p=neurons_covered_percentage_inverse)
+        num_neuron1 = np.random.choice(range(len(neurons_covered_times)), int(neuron_to_cover_num_each), replace=False,
+                                       p=neurons_covered_percentage_inverse)  #与最多覆盖次数离的越远 越可能被采样到 则说明这里是选择相对来说较少被覆盖的神经元
+        for num in num_neuron1:
+            layer_name1, index1 = neurons_key_pos[num]
+            loss1_neuron = K.mean(model.get_layer(layer_name1).output[..., index1])
+            loss_neuron.append(loss1_neuron)
+
+    # select neurons with largest weights (feature maps with largest filter weights)
+    if '2' in list(neuron_select_strategy):
+        layer_names = [layer.name for layer in model.layers if
+                       'flatten' not in layer.name and 'input' not in layer.name]
+        k = 0.1
+        top_k = k * len(model_layer_times)  # number of neurons to be selected within
+        global model_layer_weights_top_k  #model_layer_weights_top_k中存放的是layer_name, index
+        if len(model_layer_weights_top_k) == 0:
+            neuron_select_high_weight(model, layer_names, top_k)  # Set the value
+
+        num_neuron2 = np.random.choice(range(len(model_layer_weights_top_k)), int(neuron_to_cover_num_each),replace=True )#replace=False
+        for i in num_neuron2:
+            # i = np.random.choice(range(len(model_layer_weights_top_k)))
+            layer_name2 = model_layer_weights_top_k[i][0]
+            index2 = model_layer_weights_top_k[i][1]
+            loss2_neuron = K.mean(model.get_layer(layer_name2).output[..., index2])
+            loss_neuron.append(loss2_neuron)
+
+    if '3' in list(neuron_select_strategy):
+        above_threshold = []
+        below_threshold = []
+        above_num = neuron_to_cover_num_each / 2
+        below_num = neuron_to_cover_num_each - above_num #奇怪这两个不是相等吗
+        above_i = 0
+        below_i = 0
+        for (layer_name, index), value in model_layer_value.items():
+            if threshold + 0.25 > value > threshold and layer_name != 'fc1' and layer_name != 'fc2' and \
+                    layer_name != 'predictions' and layer_name != 'fc1000' and layer_name != 'before_softmax' \
+                    and above_i < above_num:
+                above_threshold.append([layer_name, index])
+                above_i += 1
+                # print(layer_name,index,value)
+                # above_threshold_dict[(layer_name, index)]=value
+            elif threshold > value > threshold - 0.2 and layer_name != 'fc1' and layer_name != 'fc2' and \
+                    layer_name != 'predictions' and layer_name != 'fc1000' and layer_name != 'before_softmax' \
+                    and below_i < below_num:
+                below_threshold.append([layer_name, index])
+                below_i += 1
+        #
+        # loss3_neuron_above = 0
+        # loss3_neuron_below = 0
+        loss_neuron = []
+        if len(above_threshold) > 0:
+            for above_item in range(len(above_threshold)):
+                loss_neuron.append(K.mean(
+                    model.get_layer(above_threshold[above_item][0]).output[..., above_threshold[above_item][1]]))
+
+        if len(below_threshold) > 0: #低于激活值的loss_neuron是负的K.mean
+            for below_item in range(len(below_threshold)):
+                loss_neuron.append(-K.mean(
+                    model.get_layer(below_threshold[below_item][0]).output[..., below_threshold[below_item][1]]))
+
+        # loss_neuron += loss3_neuron_below - loss3_neuron_above
+
+        # for (layer_name, index), value in model_layer_value.items():
+        #     if 0.5 > value > 0.25:
+        #         above_threshold.append([layer_name, index])
+        #     elif 0.25 > value > 0.2:
+        #         below_threshold.append([layer_name, index])
+        # loss3_neuron_above = 0
+        # loss3_neuron_below = 0
+        # if len(above_threshold)>0:
+        #     above_i = np.random.choice(range(len(above_threshold)))
+        #     loss3_neuron_above = K.mean(model.get_layer(above_threshold[above_i][0]).output[..., above_threshold[above_i][1]])
+        # if len(below_threshold)>0:
+        #     below_i = np.random.choice(range(len(below_threshold)))
+        #     loss3_neuron_below = K.mean(model.get_layer(below_threshold[below_i][0]).output[..., below_threshold[below_i][1]])
+        # loss_neuron += loss3_neuron_below - loss3_neuron_above
+        if loss_neuron == 0:
+            return random_strategy(model, model_layer_times, 1)  # The beginning of no neurons covered
+
+    return loss_neuron
+
+def neuron_selection_DeepXplore(model,model_layer_times,neuron_to_cover_num):
+    loss_neuron = []
+    for i in range(neuron_to_cover_num):
+        layer_name,neuron_idx = neuron_to_cover_DeepXplore(model_layer_times)
+        loss0_neuron = K.mean(model.get_layer(layer_name).output[...,neuron_idx])
+        loss_neuron.append(loss0_neuron)
+    return loss_neuron
+
+def neuron_selection_Random(model,model_layer_times,neuron_to_cover_num):
+    loss_neuron = []
+    model_layer_times_key = [(layer_name, index) for (layer_name, index), v in model_layer_times.items() ]
+    for i in range(neuron_to_cover_num):
+        layer_name, index = random.choice(model_layer_times_key)
+        loss0_neuron = K.mean(model.get_layer(layer_name).output[...,index])
+        loss_neuron.append(loss0_neuron)
+    return loss_neuron
+
+def get_signature():
+    now = datetime.now()
+    past = datetime(2015, 6, 6, 0, 0, 0, 0)
+    timespan = now - past
+    time_sig = int(timespan.total_seconds() * 1000)
+
+    return str(time_sig)
 
 def sort_img(img_list,model):
     pred_list = []
@@ -808,37 +1056,59 @@ def criterion_to_neuron_selection_area(model_name,criterion):
         elif model_name == 'lenet4':
             neuron_selection_area = '[3]'
         elif model_name == 'lenet5':
-            neuron_selection_area = '[4]'
+            neuron_selection_area = '[3]'
     elif criterion == 'SNAC':
         if model_name == 'lenet1':
             neuron_selection_area = '[3]'
         elif model_name == 'lenet4':
             neuron_selection_area = '[3]'
         elif model_name == 'lenet5':
-            neuron_selection_area = '[4]'
+            neuron_selection_area = '[3]'
     elif criterion == 'TKNC':
-        neuron_selection_area = '[1]'
+        if model_name == 'lenet1':
+            neuron_selection_area = '[4]'
+        else:
+            neuron_selection_area = '[1]'
     return neuron_selection_area
 
-def criterion_to_neuron_selection_strategy(criterion,model,neuron_region_dict,neuron_selection_area,model_layer_times_NC,neuron_to_cover_num):
+def criterion_to_neuron_selection_strategy(criterion,model,model_name,neuron_region_dict,neuron_selection_area,model_layer_times_NC,model_layer_value1,neuron_to_cover_num):
     if criterion == 'NC':
         loss_neuron = neuron_selection_addtime(model,neuron_region_dict,neuron_selection_area,model_layer_times_NC,neuron_to_cover_num)[0]
     elif criterion == 'KMNC':
         loss_neuron = neuron_selection_addmosttime(model,neuron_region_dict,neuron_selection_area,model_layer_times_NC,neuron_to_cover_num)[0]
     elif criterion == 'NBC':
-        if neuron_selection_area == '[3]':
-        #loss_neuron = neuron_selection_astime_random(model,neuron_region_dict,neuron_selection_area,model_layer_times_NC,neuron_to_cover_num)[0]
-            loss_neuron = neuron_selection(model,neuron_region_dict,neuron_selection_area,model_layer_times_NC,neuron_to_cover_num)[0]
-        elif neuron_selection_area == '[4]':
-            loss_neuron = neuron_selection_addmosttime(model,neuron_region_dict,neuron_selection_area,model_layer_times_NC,neuron_to_cover_num)[0]
+        if model_name == 'lenet1':
+            loss_neuron = neuron_selection(model, neuron_region_dict, neuron_selection_area, model_layer_times_NC,neuron_to_cover_num)[0]
+        if model_name == 'lenet4' and neuron_selection_area == '[3]':
+            #loss_neuron = neuron_selection_astime_random(model,neuron_region_dict,neuron_selection_area,model_layer_times_NC,neuron_to_cover_num)[0]
+            #loss_neuron = neuron_selection(model,neuron_region_dict,neuron_selection_area,model_layer_times_NC,neuron_to_cover_num)[0]
+            #loss_neuron = neuron_selection_highest_output(model, model_name, neuron_region_dict, neuron_selection_area,model_layer_value1, neuron_to_cover_num)[0]
+            loss_neuron = neuron_selection_addtime(model, neuron_region_dict, neuron_selection_area, model_layer_times_NC,neuron_to_cover_num)[0]
+        elif model_name == 'lenet5' and neuron_selection_area == '[3]':
+            #loss_neuron = neuron_selection_addmosttime(model,neuron_region_dict,neuron_selection_area,model_layer_times_NC,neuron_to_cover_num)[0]
+            loss_neuron = neuron_selection_highest_output(model,model_name,neuron_region_dict,neuron_selection_area,model_layer_value1,neuron_to_cover_num)[0]
+            #loss_neuron = neuron_selection_astime_random(model, neuron_region_dict, neuron_selection_area, model_layer_times_NC,neuron_to_cover_num)[0]
+            #loss_neuron = neuron_selection_addtime(model, neuron_region_dict, neuron_selection_area, model_layer_times_NC,neuron_to_cover_num)[0]
+            #loss_neuron = neuron_selection(model, neuron_region_dict, neuron_selection_area, model_layer_times_NC,neuron_to_cover_num)[0]
     elif criterion == 'SNAC':
-        if neuron_selection_area == '[3]':
-        #loss_neuron = neuron_selection_astime_random(model, neuron_region_dict, neuron_selection_area,model_layer_times_NC, neuron_to_cover_num)[0]
-            loss_neuron = neuron_selection(model, neuron_region_dict, neuron_selection_area, model_layer_times_NC, neuron_to_cover_num)[0]
-        elif neuron_selection_area == '[4]':
-            loss_neuron = neuron_selection_addmosttime(model, neuron_region_dict, neuron_selection_area,model_layer_times_NC, neuron_to_cover_num)[0]
+        if model_name == 'lenet1':
+            loss_neuron = neuron_selection(model, neuron_region_dict, neuron_selection_area, model_layer_times_NC,neuron_to_cover_num)[0]
+        if  model_name == 'lenet4' and neuron_selection_area == '[3]':
+            #loss_neuron = neuron_selection_astime_random(model, neuron_region_dict, neuron_selection_area,model_layer_times_NC, neuron_to_cover_num)[0]
+            #loss_neuron = neuron_selection(model, neuron_region_dict, neuron_selection_area, model_layer_times_NC, neuron_to_cover_num)[0]
+            #loss_neuron = neuron_selection_highest_output(model, model_name, neuron_region_dict, neuron_selection_area,model_layer_value1, neuron_to_cover_num)[0]
+            loss_neuron = neuron_selection_addtime(model, neuron_region_dict, neuron_selection_area, model_layer_times_NC,neuron_to_cover_num)[0]
+        elif model_name == 'lenet5' and neuron_selection_area == '[3]':
+            loss_neuron = neuron_selection_highest_output(model, model_name, neuron_region_dict, neuron_selection_area,model_layer_value1, neuron_to_cover_num)[0]
+            #loss_neuron = neuron_selection_addmosttime(model, neuron_region_dict, neuron_selection_area,model_layer_times_NC, neuron_to_cover_num)[0]
+            #loss_neuron = neuron_selection_astime_random(model, neuron_region_dict, neuron_selection_area, model_layer_times_NC,neuron_to_cover_num)[0]
+            #loss_neuron = neuron_selection_addtime(model, neuron_region_dict, neuron_selection_area, model_layer_times_NC,neuron_to_cover_num)[0]
+            #loss_neuron = neuron_selection(model, neuron_region_dict, neuron_selection_area, model_layer_times_NC,neuron_to_cover_num)[0]
     elif criterion == 'TKNC':
-        loss_neuron = neuron_selection_addtime(model, neuron_region_dict, neuron_selection_area, model_layer_times_NC, neuron_to_cover_num)[0]
+        if model_name == 'lenet1' and neuron_selection_area == '[4]':
+            loss_neuron = neuron_selection(model, neuron_region_dict, neuron_selection_area, model_layer_times_NC, neuron_to_cover_num)[0]
+        else:
+            loss_neuron = neuron_selection_addtime(model, neuron_region_dict, neuron_selection_area, model_layer_times_NC, neuron_to_cover_num)[0]
     return loss_neuron
 
 
